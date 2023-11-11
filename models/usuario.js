@@ -17,11 +17,11 @@ const UserSchema = new Schema({
   role: {
     type: String,
     default: "user"
+  },
+  status: {
+    type: String,
+    default: "Unverified"
   }
-//   status: {
-//     type: String,
-//     default: "No verificado"
-//   }
 });
 
 UserSchema.methods.toJSON = function () {

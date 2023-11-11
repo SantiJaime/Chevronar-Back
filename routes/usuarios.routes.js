@@ -4,12 +4,15 @@ const {
   getAllUsers,
   updateUser,
   deleteUser,
+  loginUser,
+  confirmEmail,
 } = require("../controllers/usuarios");
 const auth = require("../middleware/auth");
 const router = express.Router();
 const { check } = require("express-validator");
 
 router.get("/", auth("admin"), getAllUsers);
+router.get("/confirm/:token", confirmEmail)
 router.post(
   "/",
   [
@@ -21,6 +24,7 @@ router.post(
   ],
   createUser
 );
+router.post("/login", loginUser)
 router.put(
   "/:id",
   [check("id", "Formato ID inválido").isMongoId()],
