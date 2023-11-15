@@ -6,12 +6,14 @@ const {
   deleteUser,
   loginUser,
   confirmEmail,
+  getOneUser,
 } = require("../controllers/usuarios");
 const auth = require("../middleware/auth");
 const router = express.Router();
 const { check } = require("express-validator");
 
 router.get("/", auth("admin"), getAllUsers);
+router.get("/:id", auth(["user", "admin"]), getOneUser);
 router.get("/confirm/:token", confirmEmail)
 router.post(
   "/",

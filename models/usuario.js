@@ -21,7 +21,10 @@ const UserSchema = new Schema({
   status: {
     type: String,
     default: "Unverified"
-  }
+  },
+  idCart: {
+    type: String,
+  },
 });
 
 UserSchema.methods.toJSON = function () {

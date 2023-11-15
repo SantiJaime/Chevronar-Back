@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/usuario");
 const { getToken, getTokenData } = require("../middleware/jwt.config");
+const CartModel = require("../models/carrito");
 // const CartModel = require("../models/cart");
 
 const getAllUsers = async (req, res) => {
@@ -49,13 +50,13 @@ const createUser = async (req, res) => {
     const { email, _id, role } = newUser;
 
     const token = getToken({ email, _id, role });
-    // if (req.body.role !== "admin") {
-    //   const newCart = new CartModel();
+    if (req.body.role !== "admin") {
+      const newCart = new CartModel();
 
-    //   newUser.idCart = newCart._id;
-    //   newCart.idUser = newUser._id;
-    //   await newCart.save();
-    // }
+      newUser.idCart = newCart._id;
+      newCart.idUser = newUser._id;
+      await newCart.save();
+    }
 
     const salt = bcrypt.genSaltSync();
     newUser.pass = await bcrypt.hash(req.body.pass, salt);
