@@ -17,6 +17,7 @@ class Server {
     this.app.use("/carrito", require("../routes/carrito.routes"))
     this.app.use("/productos", require("../routes/productos.routes"))
     this.app.use("/usuarios", require("../routes/usuarios.routes"))
+    this.app.use("/ordenes-compra", require("../routes/ordenes.routes"))
   }
   listen() {
     this.app.listen(process.env.PORT, () => {
