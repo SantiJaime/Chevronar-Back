@@ -24,7 +24,7 @@ router.post(
 );
 router.delete(
   "/:id",
-  auth("user"),
+  auth("admin"),
   [check("id", "Formato ID incorrecto").isMongoId()],
   deleteOrder
 );

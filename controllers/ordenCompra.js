@@ -41,7 +41,7 @@ const deleteOrder = async (req, res) => {
   }
   try {
     await BuyOrderModel.findByIdAndDelete({ _id: req.params.id });
-    res.status(200).json({ mgs: "Orden de compra eliminada correctamente" });
+    res.status(200).json({ msg: "Orden de compra eliminada correctamente", status: 200 });
   } catch (error) {
     res
       .status(500)
