@@ -8,7 +8,7 @@ const {
   deleteOrder,
 } = require("../controllers/ordenCompra");
 
-router.get("/", auth("admin"), getOrders);
+router.get("/", auth(["user", "admin"]), getOrders);
 router.post(
   "/",
   auth("user"),
@@ -24,7 +24,7 @@ router.post(
 );
 router.delete(
   "/:id",
-  auth("admin"),
+  auth(["user", "admin"]),
   [check("id", "Formato ID incorrecto").isMongoId()],
   deleteOrder
 );
