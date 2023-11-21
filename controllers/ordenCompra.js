@@ -14,6 +14,23 @@ const getOrders = async (req, res) => {
   }
 };
 
+const getOneUserOrders = async (req, res) => {
+  try {
+    const oneUserOrders = await BuyOrderModel.find({ email: req.params.email });
+    res
+      .status(200)
+      .json({
+        msg: "Órdenes de compra encontradas",
+        oneUserOrders,
+        status: 200,
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "No se pudo encontrar las órdenes de compra", error });
+  }
+};
+
 const createOrder = async (req, res) => {
   const errors = validationResult(req);
 
@@ -41,7 +58,9 @@ const deleteOrder = async (req, res) => {
   }
   try {
     await BuyOrderModel.findByIdAndDelete({ _id: req.params.id });
-    res.status(200).json({ msg: "Orden de compra eliminada correctamente", status: 200 });
+    res
+      .status(200)
+      .json({ msg: "Orden de compra eliminada correctamente", status: 200 });
   } catch (error) {
     res
       .status(500)
@@ -51,6 +70,7 @@ const deleteOrder = async (req, res) => {
 
 module.exports = {
   getOrders,
+  getOneUserOrders,
   createOrder,
   deleteOrder,
 };

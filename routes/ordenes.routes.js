@@ -6,9 +6,11 @@ const {
   getOrders,
   createOrder,
   deleteOrder,
+  getOneUserOrders,
 } = require("../controllers/ordenCompra");
 
 router.get("/", auth(["user", "admin"]), getOrders);
+router.get("/mis-ordenes/:email", auth("user"), getOneUserOrders);
 router.post(
   "/",
   auth("user"),
