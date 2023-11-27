@@ -206,10 +206,11 @@ const changePass = async (req, res) => {
     const { token } = req.params;
     const data = await getTokenData(token);
 
-    const { _id } = data.data;
     if (!data) {
       return res.status(400).json({ msg: "Error al obtener los datos" });
     }
+    const { _id } = data.data;
+    
     const user = await UserModel.findOne({ _id });
 
     if (!user) return res.status(422).json({ msg: "El usuario no existe" });
