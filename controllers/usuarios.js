@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/usuario");
 const { getToken, getTokenData } = require("../middleware/jwt.config");
 const CartModel = require("../models/carrito");
-// const CartModel = require("../models/cart");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -140,14 +139,12 @@ const loginUser = async (req, res) => {
         },
       };
       const token = jwt.sign(payload_jwt, process.env.SECRET_KEY);
-      res
-        .status(200)
-        .json({
-          msg: "Sesión iniciada correctamente",
-          userExist,
-          token,
-          status: 200,
-        });
+      res.status(200).json({
+        msg: "Sesión iniciada correctamente",
+        userExist,
+        token,
+        status: 200,
+      });
     } else {
       res
         .status(422)
@@ -177,12 +174,52 @@ const confirmEmail = async (req, res) => {
       user.status = "Verified";
       await user.save();
 
-      res.redirect("https://chevronar.vercel.app/confirm")
+      res.redirect("https://chevronar.vercel.app/confirm");
     } else {
       res.redirect("https://chevronar.vercel.app/*");
     }
   } catch (error) {
     res.status(500).json({ msg: "Error al verificar correo", error });
+  }
+};
+const sendMailRecoveryPass = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!user) return res.status(422).json({ msg: "El usuario no existe" });
+
+    const { email, _id, role } = user;
+
+    const token = getToken({ email, _id, role });
+
+    res.status(201).json({
+      msg: "Mensaje de recuperación de contraseña enviado correctamente",
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al verificar correo", error });
+  }
+};
+
+const changePass = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const data = await getTokenData(token);
+
+    const { _id } = data.data;
+    if (!data) {
+      return res.status(400).json({ msg: "Error al obtener los datos" });
+    }
+    const user = await UserModel.findOne({ _id });
+
+    if (!user) return res.status(422).json({ msg: "El usuario no existe" });
+
+    const salt = bcrypt.genSaltSync();
+    user.pass = await bcrypt.hash(req.body.pass, salt);
+    await user.save();
+    res.status(200).json({ msg: "Contraseña actualizada correctamente", user });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al cambiar la contraseña", error });
   }
 };
 module.exports = {
@@ -193,4 +230,6 @@ module.exports = {
   deleteUser,
   loginUser,
   confirmEmail,
+  sendMailRecoveryPass,
+  changePass,
 };

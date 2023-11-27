@@ -7,6 +7,8 @@ const {
   loginUser,
   confirmEmail,
   getOneUser,
+  sendMailRecoveryPass,
+  changePass,
 } = require("../controllers/usuarios");
 const auth = require("../middleware/auth");
 const router = express.Router();
@@ -14,7 +16,7 @@ const { check } = require("express-validator");
 
 router.get("/", auth("admin"), getAllUsers);
 router.get("/:id", auth(["user", "admin"]), getOneUser);
-router.get("/confirm/:token", confirmEmail)
+router.get("/confirm/:token", confirmEmail);
 router.post(
   "/",
   [
@@ -26,13 +28,20 @@ router.post(
   ],
   createUser
 );
-router.post("/login", loginUser)
+router.post("/login", loginUser);
+router.post("/sendMailRecoveryPass", sendMailRecoveryPass);
+router.put(
+  "/recoveryPass/:token",
+  [check("pass", "Campo contraseña obligatorio").notEmpty()],
+  changePass
+);
 router.put(
   "/:id",
   [check("id", "Formato ID inválido").isMongoId()],
   auth(["user", "admin"]),
   updateUser
 );
+
 router.delete(
   "/:id",
   [check("id", "Formato ID inválido").isMongoId()],
