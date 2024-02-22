@@ -174,9 +174,9 @@ const confirmEmail = async (req, res) => {
       user.status = "Verified";
       await user.save();
 
-      res.redirect("https://chevronar.vercel.app/confirm");
+      res.redirect("https://chevronar.com/confirm");
     } else {
-      res.redirect("https://chevronar.vercel.app/*");
+      res.redirect("https://chevronar.com/*");
     }
   } catch (error) {
     res.status(500).json({ msg: "Error al verificar correo", error });
