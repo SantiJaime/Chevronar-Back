@@ -22,10 +22,9 @@ router.post(
     check("nombre", "El campo nombre está vacío").notEmpty(),
     check(
       "nombre",
-      "Mínimo de 3 caracteres | Máximo de 100 caracteres"
+      "Mínimo de 3 caracteres"
     ).isLength({
       min: 3,
-      max: 100,
     }),
     check("descripcion", "El campo descripción está vacío").notEmpty(),
     check("categoria", "El campo categoría está vacío").notEmpty(),
